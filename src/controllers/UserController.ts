@@ -113,7 +113,7 @@ export const login = async (req: Request, res: Response) => {
     }
 }
 
-export const getMe = async (req: Request, res: Response) => {
+export const getProfile = async (req: Request, res: Response) => {
     try {
         const user = await UserModel.findById(req.userId) 
 
@@ -129,5 +129,13 @@ export const getMe = async (req: Request, res: Response) => {
         return res.status(400).json({
             message: 'No auth'
         })
+    }
+}
+
+export const deleteProfile = async (req: Request, res: Response) => {
+    try {
+        
+    } catch (error) {
+        res.json(error)
     }
 }

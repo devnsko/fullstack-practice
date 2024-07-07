@@ -6,6 +6,8 @@ import mongoose from 'mongoose';
 import { registerValidator, loginValidator } from './validations/auth.js'
 import checkAuth from './utils/checkAuth.js';
 import * as UserController from './controllers/UserController.js'
+import * as PostController from './controllers/PostController.js'
+
 
 import morgan from 'morgan';
 dotenv.config()
@@ -27,11 +29,17 @@ const server = http.createServer(app);
 const port = process.env.PORT;
 
 
-app.get('/me', checkAuth, UserController.getMe)
-
+app.get('/profile', checkAuth, UserController.getProfile)
 app.post('/login', loginValidator, UserController.login)
-
 app.post('/reg', registerValidator, UserController.register)
+app.delete('/profile', checkAuth, UserController.deleteProfile)
+
+app.get('/post', checkAuth, PostController.getPost)
+app.post('/post', checkAuth, PostController.create)
+app.patch('/post', checkAuth, PostController.edit)
+app.delete('/post', checkAuth, PostController.delete)
+
+
 
 server.listen(port, () => {
     console.log(`⚡️[server]: Server is running at http://localhost:${port}`);

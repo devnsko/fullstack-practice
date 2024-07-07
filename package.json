@@ -8,7 +8,8 @@
     "build": "rimraf ./build && tsc",
     "start": "node build/index.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon dist/index.js\"",
-    "push": "powershell -Command \"git add .; if ($?) { git commit -m 'Minor update'; if ($?) { git push } }\""
+    "push": "powershell -Command \"git add .; if ($?) { git commit -m 'Minor update'; if ($?) { git push } }\"",
+    "push:unix" : "git add . && git commit -m 'Minor update' && git push"
   },
   "keywords": [],
   "author": "",
