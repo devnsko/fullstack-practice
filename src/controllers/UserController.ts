@@ -118,7 +118,7 @@ export const getProfile = async (req: Request, res: Response) => {
         const user = await UserModel.findById(req.userId) 
 
         if(user) {
-            const {passwordHash, ...userData} = user;
+            const {passwordHash, ...userData} = user.toObject();
             return res.json(userData)
         }
         return res.status(400).json({
