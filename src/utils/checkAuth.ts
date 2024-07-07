@@ -10,12 +10,12 @@ export default (req: Request, res: Response, next: NextFunction) => {
             next()
         } catch (err) {
             return res.status(500).json({
-                message: '???'
+                message: 'No token'
             })
         }
     } else {
         return res.status(403).json({
-            message: 'No'
+            message: 'No token'
         })
     }
 }

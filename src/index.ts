@@ -54,21 +54,21 @@ async function userToken(user_id: mongoose.Types.ObjectId) {
     return token;
 }
 
-app.get('/me', checkAuth, (req: Request, res: Response) => {
+app.get('/me', checkAuth, async (req: Request, res: Response) => {
     try {
-        const user = UserModel.findById(req.userId) 
+        const user = await UserModel.findById(req.userId) 
 
-        // if(user){
-        //     const {passwordHash, ...userData} = user;
-        // }
-
-        res.json({
-            user
+        if(user) {
+            const {passwordHash, ...userData} = user;
+            return res.json(userData)
+        }
+        return res.status(400).json({
+            message: 'Error with user'
         })
     } catch (error) {
         console.log(error)
         return res.status(400).json({
-            message: '((('
+            message: 'No auth'
         })
     }
 })
@@ -79,7 +79,7 @@ app.post('/login', loginValidator, async (req: Request, res: Response) => {
         if(!errs.isEmpty()){
             console.log(errs.array)
             return res.status(400).json({
-                message: 'Smth Wrong!'
+                message: 'Non valid!'
             })
         }
 
@@ -88,19 +88,18 @@ app.post('/login', loginValidator, async (req: Request, res: Response) => {
         const user = await UserModel.findOne({username: req.body.username});
 
         if (!user) {
-            return res.status(404).json({
+            return res.status(400).json({
                 message: 'Wrong pass or login'
             })
         }
 
         const validatePass = await comparePas(user.passwordHash, password);
         if (!validatePass) {
-            return res.status(404).json({
+            return res.status(400).json({
                 message: 'Wrong pass or login'
             })
         }
-
-        const token = userToken(user._id);
+        const token = await userToken(user._id);
 
         const {passwordHash, ...userData} = user.toObject();
 
@@ -123,12 +122,7 @@ app.post('/reg', registerValidator, async (req: Request, res: Response) => {
         if(!errs.isEmpty()){
             return res.status(400).json(errs.array());
         }
-        
-        // hashPass('qwerty123')
-        // .then(res => comparePas(res, 'qwerty123'))
-        // .then(res => console.log(res))
-    
-        
+
         const hash = await hashPass(req.body.password);
         const username = req.body.email.split('@')[0];
         console.log(username);
