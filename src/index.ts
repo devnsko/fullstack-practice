@@ -39,9 +39,9 @@ app.post('/reg', registerValidator, UserController.register)
 app.get('/posts', checkAuth, PostController.getAll)
 app.get('/posts/:id', checkAuth, PostController.getOne)
 app.post('/posts', checkAuth, postCreateValidation, PostController.create)
-app.patch('/posts', checkAuth, postEditValidation, PostController.edit)
-app.delete('/post/:id', checkAuth, PostController.deleteOne)
-app.delete('/post', checkAdmin, PostController.deleteAll)
+app.patch('/posts/:id', checkAuth, postEditValidation, PostController.edit)
+app.delete('/posts/:id', checkAuth, PostController.deleteOne)
+app.delete('/posts', checkAdmin, PostController.deleteAll)
 
 
 

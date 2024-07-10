@@ -33,18 +33,22 @@ export const edit = async (req: Request, res: Response) => {
         if(!errs.isEmpty()){
             return res.status(400).json(errs.array());
         }
-        const postId = req.body.postId;
+        const postId = req.params.id;
         const post = await PostModel.findById(postId);
         if(post){
             post.title = req.body.title;
             post.text = req.body.text;
             
             const editedPost = await post.save();
-            return res.json(editedPost);
+            return res.json({
+                success: "true",
+                message: "Edit successfuly",
+                ...editedPost
+            });
         }
-        return res.status(404).json({
-            message: 'Invalid'
-        })
+        // return res.status(404).json({
+        //     message: 'Invalid'
+        // })
 
     } catch (error) {
         res.status(500).json(error)
@@ -97,7 +101,10 @@ export const deleteOne = async (req: Request, res: Response) => {
     try {
         const postId = req.params.id as string;
         const post = await PostModel.findByIdAndDelete(postId);
-        res.json(post)
+        res.json({
+            ...post,
+            message: "Post was deleted successfuly!"
+        })
     } catch (error) {
         res.status(500).json(error)
     }
@@ -106,7 +113,10 @@ export const deleteOne = async (req: Request, res: Response) => {
 export const deleteAll = async (req: Request, res: Response) => {
     try {
         const post = await PostModel.deleteMany();
-        res.json(post)
+        res.json({
+            ...post,
+            message: "All posts was deleted!"
+        })
     } catch (error) {
         res.status(500).json(error)
     }

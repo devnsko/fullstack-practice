@@ -4,19 +4,25 @@ configDotenv;
 import jwt from "jsonwebtoken";
 
 export default (req: Request, res: Response, next: NextFunction) => {
-    const token = (req.headers.authorization || '').replace(/Bearer\s?/, '');
-    if ( token && token == process.env.ADMIN){
-        try {
+    try {
+        const token = (req.headers.authorization || '').replace(/Bearer\s?/, '');
+        console.debug(process.env.ADMIN, token)
+        if ( token ) {
             const decoded = jwt.verify(token, 'secret123') as jwt.JwtPayload;
-            req.userId = decoded._id;
-            next()
-        } catch (err) {
-            return res.status(500).json({
+            if (decoded._id == process.env.ADMIN){
+                
+                const decoded = jwt.verify(token, 'secret123') as jwt.JwtPayload;
+                req.userId = decoded._id;
+                next()
+                
+            } else {
+                return res.status(403).json({
                 message: 'Only for admin'
             })
         }
-    } else {
-        return res.status(403).json({
+        }   
+    } catch (err) {
+        return res.status(500).json({
             message: 'Only for admin'
         })
     }

@@ -6,6 +6,7 @@
   "type": "commonjs",
   "scripts": {
     "build": "rimraf ./build && tsc",
+    "prestart": "npm run build",
     "start": "node build/index.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon dist/index.js\"",
     "push": "powershell -Command \"git add .; if ($?) { git commit -m 'Minor update'; if ($?) { git push } }\"",
