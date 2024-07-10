@@ -3,7 +3,7 @@ import http from 'http';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import mongoose from 'mongoose';
-import { registerValidator, loginValidator } from './validations/auth.js'
+import { registerValidator, loginValidator, editValidator } from './validations/auth.js'
 import { postCreateValidation, postEditValidation } from './validations/post.js'
 import checkAuth from './utils/checkAuth.js';
 import checkAdmin from './utils/checkAdmin.js';
@@ -32,9 +32,10 @@ const port = process.env.PORT;
 
 
 app.get('/profile', checkAuth, UserController.getProfile)
+app.patch('/profile', editValidator, checkAuth, UserController.editProfile)
 app.post('/login', loginValidator, UserController.login)
 app.post('/reg', registerValidator, UserController.register)
-// app.delete('/profile', checkAuth, UserController.deleteProfile)
+app.delete('/profile', checkAuth, UserController.deleteProfile)
 
 app.get('/posts', checkAuth, PostController.getAll)
 app.get('/posts/:id', checkAuth, PostController.getOne)

@@ -132,9 +132,35 @@ export const getProfile = async (req: Request, res: Response) => {
     }
 }
 
+export const editProfile = async (req: Request, res: Response) => {
+    try {
+        await UserModel.findByIdAndUpdate(
+            req.userId,
+            {
+                username: req.body.username,
+                name: req.body.name ?? "",
+                avatarUrl: req.body.avatarUrl ?? ""
+            }
+        )
+        res.json({
+            message: "success"
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json({
+            error: error
+        })
+    }
+}
+
 export const deleteProfile = async (req: Request, res: Response) => {
     try {
-        
+        const deletedUser = await UserModel.findByIdAndDelete(req.userId)
+        res.json({
+            success: true,
+            message: "Profile deleted.",
+            ...deleteProfile
+        })
     } catch (error) {
         res.json(error)
     }

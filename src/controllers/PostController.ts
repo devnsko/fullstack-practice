@@ -34,22 +34,19 @@ export const edit = async (req: Request, res: Response) => {
             return res.status(400).json(errs.array());
         }
         const postId = req.params.id;
-        const post = await PostModel.findById(postId);
-        if(post){
-            post.title = req.body.title;
-            post.text = req.body.text;
+        await PostModel.findByIdAndUpdate(
+        postId,
+        {
+            title: req.body.title,
+            text: req.body.text,
+            tags: req.body.tags ?? [],
+            imageUrl: req.body.imageUrl
+        });
             
-            const editedPost = await post.save();
-            return res.json({
-                success: "true",
-                message: "Edit successfuly",
-                ...editedPost
-            });
-        }
-        // return res.status(404).json({
-        //     message: 'Invalid'
-        // })
-
+        return res.json({
+            success: true
+        });
+    
     } catch (error) {
         res.status(500).json(error)
     }
