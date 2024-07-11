@@ -33,10 +33,6 @@ async function userToken(user_id: mongoose.Types.ObjectId) {
 
 export const register = async (req: Request, res: Response) => {
     try {
-        const errs = validationResult(req);
-        if(!errs.isEmpty()){
-            return res.status(400).json(errs.array());
-        }
 
         const hash = await hashPass(req.body.password);
         const username = req.body.email.split('@')[0];
@@ -72,14 +68,6 @@ export const register = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
     try {
-        const errs = validationResult(req);
-        if(!errs.isEmpty()){
-            console.log(errs.array)
-            return res.status(400).json({
-                message: 'Non valid!'
-            })
-        }
-
         const password = req.body.password;
 
         const user = await UserModel.findOne({username: req.body.username});
@@ -164,4 +152,12 @@ export const deleteProfile = async (req: Request, res: Response) => {
     } catch (error) {
         res.json(error)
     }
+}
+
+export const getAll = async (req: Request, res: Response) => {
+    const profiles = await UserModel.find();
+
+    res.json({
+        profiles
+    })
 }

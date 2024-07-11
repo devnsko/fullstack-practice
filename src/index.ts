@@ -15,8 +15,6 @@ import {
     postEditValidation 
 } from './validations/index.js';
 
-
-
 dotenv.config()
 
 
@@ -46,14 +44,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/uploads', express.static('uploads'));
 
 const server = http.createServer(app);
-const port = process.env.PORT;
+const port = process.env.PORT || 4444;
 
 
-app.post('/reg', registerValidator, handleValidationErrors, UserController.register)
+app.post('/register', registerValidator, handleValidationErrors, UserController.register)
 app.post('/login', loginValidator, handleValidationErrors, UserController.login)
 app.get('/profile', checkAuth, UserController.getProfile)
 app.patch('/profile', editValidator, handleValidationErrors, checkAuth, UserController.editProfile)
 app.delete('/profile', checkAuth, UserController.deleteProfile)
+app.get('/profiles', UserController.getAll)
 
 app.post('/upload', checkAuth, upload.single('image'), (req: Request, res: Response) => {
     if(req.file){
