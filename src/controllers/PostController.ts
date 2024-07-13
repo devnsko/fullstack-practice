@@ -118,3 +118,13 @@ export const deleteAll = async (req: Request, res: Response) => {
         res.status(500).json(error)
     }
 }
+
+export const getLastTags = async (req: Request, res: Response) => {
+    try {
+        const posts = await PostModel.find().limit(5).exec();
+        const tags = posts.map((post) => post.tags).flat().slice(0, 5);
+        res.json(tags)
+    } catch (error) {
+        res.status(500).json(error)
+    }
+}

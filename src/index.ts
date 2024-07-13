@@ -65,8 +65,10 @@ app.post('/upload', checkAuth, upload.single('image'), (req: Request, res: Respo
     })
 })
 
-app.get('/posts', checkAuth, PostController.getAll)
-app.get('/posts/:id', checkAuth, PostController.getOne)
+app.get('/tags', PostController.getLastTags);
+
+app.get('/posts', PostController.getAll)
+app.get('/posts/:id', PostController.getOne)
 app.post('/posts', checkAuth, postCreateValidation, handleValidationErrors, PostController.create)
 app.patch('/posts/:id', checkAuth, postEditValidation, handleValidationErrors, PostController.edit)
 app.delete('/posts/:id', checkAuth, PostController.deleteOne)
