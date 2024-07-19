@@ -35,12 +35,10 @@ export const register = async (req: Request, res: Response) => {
     try {
 
         const hash = await hashPass(req.body.password);
-        const username = req.body.email.split('@')[0];
-        console.log(username);
         
         const doc = new UserModel({
             email: req.body.email,
-            username: username,
+            username: req.body.username,
             avatarUrl: req.body.avatarUrl,
             passwordHash: hash
         })
